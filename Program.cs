@@ -1,4 +1,6 @@
 using StudentApi.Data;
+using StudentApi.Services.Interfaces; // Add this directive
+using StudentApi.Services.Implementation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

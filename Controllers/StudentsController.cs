@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using StudentApi.Data;
 using StudentApi.Models;
+using StudentApi.DTOs;
+using StudentApi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
@@ -15,32 +16,75 @@ public class StudentsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Student>>> GetAll()
+    public async Task<ActionResult<IEnumerable<StudentDto>>> GetAll()
     {
         var students = await _studentService.GetAllStudentsAsync();
-        return Ok(students);
+
+        // Map Student to StudentDto
+        var studentDtos = students.Select(s => new StudentDto
+        {
+            Id = s.Id,
+            Name = s.Name,
+            Age = s.Age
+        });
+
+        return Ok(studentDtos);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Student>> GetById(int id)
+    public async Task<ActionResult<StudentDto>> GetById(int id)
     {
         var student = await _studentService.GetStudentByIdAsync(id);
         if (student == null) return NotFound();
-        return Ok(student);
+
+        // Map Student to StudentDto
+        var studentDto = new StudentDto
+        {
+            Id = student.Id,
+            Name = student.Name,
+            Age = student.Age
+        };
+
+        return Ok(studentDto);
     }
 
     [HttpPost]
-    public async Task<ActionResult<Student>> Create(Student student)
+    public async Task<ActionResult<StudentDto>> Create(StudentDto studentDto)
     {
-        var createdStudent = await _studentService.CreateStudentAsync(student);
-        return CreatedAtAction(nameof(GetById), new { id = createdStudent.Id }, createdStudent);
+        // Map StudentDto to Student
+        var student = new Student
+        {
+            Name = studentDto.Name,
+            Age = studentDto.Age
+        };
+
+        var createdStudent = await _studentService.CreateStudentAsync(studentDto);
+
+        // Map created Student to StudentDto
+        var createdStudentDto = new StudentDto
+        {
+            Id = createdStudent.Id,
+            Name = createdStudent.Name,
+            Age = createdStudent.Age
+        };
+
+        return CreatedAtAction(nameof(GetById), new { id = createdStudentDto.Id }, createdStudentDto);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Student student)
+    public async Task<IActionResult> Update(int id, StudentDto studentDto)
     {
-        var success = await _studentService.UpdateStudentAsync(id, student);
+        // Map StudentDto to Student
+        var student = new Student
+        {
+            Id = id,
+            Name = studentDto.Name,
+            Age = studentDto.Age
+        };
+
+        var success = await _studentService.UpdateStudentAsync(id, studentDto);
         if (!success) return BadRequest();
+
         return NoContent();
     }
 
@@ -49,6 +93,7 @@ public class StudentsController : ControllerBase
     {
         var success = await _studentService.DeleteStudentAsync(id);
         if (!success) return NotFound();
+
         return NoContent();
     }
 }

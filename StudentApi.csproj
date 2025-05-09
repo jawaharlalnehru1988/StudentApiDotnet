@@ -16,10 +16,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.13" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-		<Compile Include="Models\Student.cs" />
-		<Compile Include="Data\AppDbContext.cs" />
-		<Compile Include="Services\IStudentService.cs" />
-		<Compile Include="Services\serviceImpl\StudentService.cs" />
+		
 	</ItemGroup>
 
 </Project>

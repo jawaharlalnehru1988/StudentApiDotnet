@@ -111,3 +111,4 @@ D:\StudentApi\obj\Debug\net8.0\refint\StudentApi.dll
 D:\StudentApi\obj\Debug\net8.0\StudentApi.pdb
 D:\StudentApi\obj\Debug\net8.0\StudentApi.genruntimeconfig.cache
 D:\StudentApi\obj\Debug\net8.0\ref\StudentApi.dll
+D:\StudentApi\obj\Debug\net8.0\StudentApi.sourcelink.json
